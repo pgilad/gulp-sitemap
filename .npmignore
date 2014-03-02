@@ -1,0 +1,12 @@
+.DS_Store
+.editorconfig
+.git*
+.idea
+.jshintrc
+.npmignore
+.travis.yml
+gulpfile.js
+sitemap.xml
+node_modules
+npm-debug.log
+test/
