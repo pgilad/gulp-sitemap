@@ -1,9 +1,9 @@
 # [gulp](https://github.com/wearefractal/gulp)-sitemap
 > Generate a search engine friendly sitemap.xml using a Gulp stream
 
-[![NPM Version](http://img.shields.io/npm/v/gulp-sitemap.svg)](https://npmjs.org/package/gulp-sitemap)
-[![Gittip](http://img.shields.io/gittip/pgilad.svg)](https://www.gittip.com/pgilad/)
-[![Dependencies](http://img.shields.io/gemnasium/pgilad/gulp-sitemap.svg)](https://gemnasium.com/pgilad/gulp-sitemap)
+[![NPM version](https://badge.fury.io/js/gulp-sitemap.png)](http://badge.fury.io/js/gulp-sitemap)
+[![Dependencies](https://gemnasium.com/pgilad/gulp-sitemap.png)](https://gemnasium.com/pgilad/gulp-sitemap)
+[![Build Status](https://travis-ci.org/pgilad/gulp-sitemap.png?branch=master)](https://travis-ci.org/pgilad/gulp-sitemap)
 
 Easily generate a search engine friendly sitemap.xml from your project.
 
