@@ -3,10 +3,9 @@ var gulp = require('gulp');
 var sitemap = require('./index');
 
 gulp.task('default', function () {
-    gulp.src(['test/fixtures/**/*.html', '!**404.html'], {
+    gulp.src(['test/fixtures/**/*.html'], {
         read: false
     }).pipe(sitemap({
         siteUrl: 'http://www.amazon.com/'
-    }))
-        .pipe(gulp.dest('./'));
+    })).pipe(gulp.dest('./'));
 });

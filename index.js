@@ -55,6 +55,7 @@ module.exports = function (params) {
             //url location. Use slash to convert windows \\ or \ to /
             var loc = siteUrl + slash(relativeFile);
 
+            //push file to xml
             xmlOutput.push(spacing + '<url>');
             xmlOutput.push(spacing + spacing + '<loc>' + loc + '</loc>');
             xmlOutput.push(spacing + spacing + '<lastmod>' + lastmod + '</lastmod>');
@@ -80,6 +81,7 @@ module.exports = function (params) {
                 contents: new Buffer(sitemapContent)
             });
 
+            //push file to stream
             this.push(sitemapFile);
             gutil.log('Generated', gutil.colors.blue(fileName));
 
