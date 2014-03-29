@@ -2,6 +2,7 @@
 var gutil = require('gulp-util');
 var slash = require('slash');
 var through = require('through2');
+var fs = require('fs');
 var path = require('path');
 
 module.exports = function (params) {
@@ -36,6 +37,26 @@ module.exports = function (params) {
     xmlOutput.push('<?xml version="1.0" encoding="UTF-8"?>');
     xmlOutput.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
+    //add file to xml
+    var addFile = function (file, lastmod, cb) {
+        //format mtime to ISO (same as +00:00)
+        lastmod = new Date(lastmod).toISOString();
+        //turn index.html into -> /
+        var relativeFile = file.relative.replace(/(index)\.(html?){1}$/, '', 'i');
+        //url location. Use slash to convert windows \\ or \ to /
+        var loc = siteUrl + slash(relativeFile);
+
+        //push file to xml
+        xmlOutput.push(spacing + '<url>');
+        xmlOutput.push(spacing + spacing + '<loc>' + loc + '</loc>');
+        xmlOutput.push(spacing + spacing + '<lastmod>' + lastmod + '</lastmod>');
+        xmlOutput.push(spacing + spacing + '<changefreq>' + changeFreq + '</changefreq>');
+        xmlOutput.push(spacing + spacing + '<priority>' + priority + '</priority>');
+        xmlOutput.push(spacing + '</url>');
+
+        return cb();
+    }
+
     return through.obj(function (file, enc, cb) {
             //skip 404 file
             if (/404\.html?$/i.test(file.relative)) {
@@ -46,24 +67,27 @@ module.exports = function (params) {
                 firstFile = file;
             }
 
-            //get modified time
-            var lastmod = (file.stat.mtime).getTime();
-            //format mtime to ISO (same as +00:00)
-            lastmod = new Date(lastmod).toISOString();
-            //turn index.html into -> /
-            var relativeFile = file.relative.replace(/(index)\.[A-z]+$/, '', 'i');
-            //url location. Use slash to convert windows \\ or \ to /
-            var loc = siteUrl + slash(relativeFile);
+            //if file has stat.mtime use it
+            if (file.stat && file.stat.mtime) {
+                //get modified time
+                var lastmod = file.stat.mtime;
+                //add file to xml
+                return addFile(file, lastmod, cb);
+            }
 
-            //push file to xml
-            xmlOutput.push(spacing + '<url>');
-            xmlOutput.push(spacing + spacing + '<loc>' + loc + '</loc>');
-            xmlOutput.push(spacing + spacing + '<lastmod>' + lastmod + '</lastmod>');
-            xmlOutput.push(spacing + spacing + '<changefreq>' + changeFreq + '</changefreq>');
-            xmlOutput.push(spacing + spacing + '<priority>' + priority + '</priority>');
-            xmlOutput.push(spacing + '</url>');
+            //otherwise get it from file using fs
+            fs.stat(file.path, function (err, stats) {
+                if (err) {
+                    if (err.code === 'ENOENT') {
+                        return cb();
+                    }
+                    this.emit('error', new gutil.PluginError('gulp-sitemap', err));
+                    return cb();
+                }
 
-            return cb();
+                //add file to xml
+                return addFile(file, stats.mtime, cb);
+            }.bind(this));
         },
         function (cb) {
             if (!firstFile) {
