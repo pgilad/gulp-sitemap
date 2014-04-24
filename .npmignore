@@ -6,7 +6,7 @@
 .npmignore
 .travis.yml
 gulpfile.js
-node_modules
+node_modules/
 npm-debug.log
 sitemap.xml
 test/
