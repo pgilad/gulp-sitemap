@@ -5,6 +5,10 @@ var through = require('through2');
 var fs = require('fs');
 var path = require('path');
 
+var xmlHeader = ['<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+];
+
 module.exports = function (params) {
     params = params || {};
     //first file to capture cwd
@@ -19,25 +23,22 @@ module.exports = function (params) {
     var priority = params.priority && params.priority.toString() || '0.5';
     //set default base site url
     var siteUrl;
-    if (!params.siteUrl) {
-        siteUrl = '/';
-    } else {
-        siteUrl = params.siteUrl;
-        //ensure trailing slash
-        if (siteUrl.slice(-1) !== '/') {
-            siteUrl += '/';
-        }
-    }
+
     //set xml spacing. can be \t for tabs
     var spacing = params.spacing || '    ';
 
     //array to hold lines of output sitemap.xml
-    var xmlOutput = [];
-    //opening lines
-    xmlOutput.push('<?xml version="1.0" encoding="UTF-8"?>');
-    xmlOutput.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+    var xmlOutput = [].concat(xmlHeader);
 
-    //add file to xml
+    /**
+     * addFile
+     *
+     * @param file
+     * @param lastmod
+     * @param spacing
+     * @param cb
+     * @return
+     */
     var addFile = function (file, lastmod, cb) {
         //format mtime to ISO (same as +00:00)
         lastmod = new Date(lastmod).toISOString();
@@ -55,13 +56,40 @@ module.exports = function (params) {
         xmlOutput.push(spacing + '</url>');
 
         return cb();
+    };
+
+    if (!params.siteUrl) {
+        siteUrl = null;
+    } else {
+        siteUrl = params.siteUrl;
+        //ensure trailing slash
+        if (siteUrl.slice(-1) !== '/') {
+            siteUrl += '/';
+        }
     }
 
     return through.obj(function (file, enc, cb) {
+            //pass through empty file
+            if (file.isNull()) {
+                this.push(file);
+                return cb();
+            }
+
+            if (file.isStream()) {
+                this.emit('error', new gutil.PluginError('gulp-sitemap', 'Streaming not supported'));
+                return cb();
+            }
+
+            if (!siteUrl) {
+                this.emit('error', new gutil.PluginError('gulp-sitemap', 'siteUrl is a required param'));
+                return cb();
+            }
+
             //skip 404 file
             if (/404\.html?$/i.test(file.relative)) {
                 return cb();
             }
+
             //assign first file to get relative cwd/path
             if (!firstFile) {
                 firstFile = file;
@@ -77,10 +105,13 @@ module.exports = function (params) {
 
             //otherwise get it from file using fs
             fs.stat(file.path, function (err, stats) {
-                if (err) {
+                if (err || !stats || !stats.mtime) {
+                    //file not found
                     if (err.code === 'ENOENT') {
+                        //skip it
                         return cb();
                     }
+                    err = err || 'No stats found for file ' + file.path;
                     this.emit('error', new gutil.PluginError('gulp-sitemap', err));
                     return cb();
                 }
@@ -93,15 +124,16 @@ module.exports = function (params) {
             if (!firstFile) {
                 return cb();
             }
+            //close off urlset
             xmlOutput.push('</urlset>');
+            //build as string
             var sitemapContent = xmlOutput.join(newLine);
-            var sitemapPath = path.join(firstFile.base, fileName);
 
             //create vinyl file
             var sitemapFile = new gutil.File({
                 cwd: firstFile.cwd,
                 base: firstFile.base,
-                path: sitemapPath,
+                path: path.join(firstFile.base, fileName),
                 contents: new Buffer(sitemapContent)
             });
 

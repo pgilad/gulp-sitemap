@@ -30,14 +30,16 @@ var sitemap = require('gulp-sitemap');
 gulp.task('sitemap', function () {
     gulp.src('build/**/*.html', {
         read: false
-    }).pipe(sitemap())
+    }).pipe(sitemap({
+            siteUrl: 'http://www.amazon.com'
+        }))
         .pipe(gulp.dest('build/'));
 });
 ```
 
-* File content isn't necessary when reading files - so to speed up building - use the `{read:false}` on `gulp.src`.
-* index.html will be turned into directory path `/`.
-* 404.html will be skipped automatically. No need to unglob it.
+* File content isn't necessary when reading files - so to speed up building - use `{read:false}` on `gulp.src`.
+* *index.html* will be turned into directory path `/`.
+* *404.html* will be skipped automatically. No need to unglob it.
 
 ## Example with all options and their defaults
 ```js
@@ -52,7 +54,7 @@ gulp.task('sitemap', function () {
         newLine: '\n',
         changeFreq: 'daily',
         priority: '0.5',
-        siteUrl: '',
+        siteUrl: 'http://www.amazon.com',
         spacing: '    '
         }))
     .pipe(gulp.dest('build/'));
@@ -61,30 +63,43 @@ gulp.task('sitemap', function () {
 
 ## Options
 
-### fileName
-
-Determine the output filename for the sitemap. Default: `sitemap.xml`.
-
 ### siteUrl
 
-What is your website's url. This gets prepended to all documents locations. Default: ``.
+**required**
+
+Your website's base url. This gets prepended to all documents locations.
+
+### fileName
+
+Default: `sitemap.xml`
+
+Determine the output filename for the sitemap.
+
 
 ### changeFreq
 
-Gets filled inside the sitemap in the tag `<changefreq>`. Default: `daily`.
+Default: `daily`
+
+Gets filled inside the sitemap in the tag `<changefreq>`.
 
 ### priority
 
-Gets filled inside the sitemap in the tag `<priority>`. Default: `0.5`.
+Default: `0.5`
+
+Gets filled inside the sitemap in the tag `<priority>`.
 
 ### newLine
 
-How to join line in the target sitemap file. Defaults to your system OS or `\n`.
+Default: Your OS's new line, mostly: `\n`
+
+How to join line in the target sitemap file.
 
 ### spacing
 
+Default: '    '
+
 How should the sitemap xml file be spaced. You can use `\t` for tabs, or `  ` with 2
-spaces if you'd like. Default: `    ` (4 spaces).
+spaces if you'd like.
 
 ## Thanks
 

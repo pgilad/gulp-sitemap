@@ -5,11 +5,34 @@ var gulp = require('gulp');
 var fs = require('fs');
 var sitemap = require('../index');
 
-it('should generate a sitemap.xml using default values', function (cb) {
+it('should throw if not provided with site url', function (cb) {
     var stream = sitemap();
+    var testedFile = 'test/fixtures/test.html';
+
+    stream.on('error', function (err) {
+        should.exist(err);
+        err.name.should.equal('Error');
+        err.message.should.equal('siteUrl is a required param');
+        cb();
+    });
+
+    stream.write(new gutil.File({
+        cwd: __dirname,
+        base: __dirname,
+        path: testedFile,
+        contents: new Buffer('hello there')
+    }));
+
+    stream.end();
+});
+
+it('should generate a sitemap.xml using default values', function (cb) {
+    var stream = sitemap({
+        siteUrl: 'http://www.amazon.com'
+    });
     var expectedLastmod;
     var testedFile = 'test/fixtures/test.html';
-    var fileStat = fs.statSync(__filename)
+    var fileStat = fs.statSync(__filename);
 
     stream.on('data', function (data) {
         data.path.should.containEql('sitemap.xml');
@@ -17,14 +40,14 @@ it('should generate a sitemap.xml using default values', function (cb) {
 
         contents.should.containEql('test.html');
         contents.should.not.containEql('home.html');
-        contents.should.containEql('<loc>/fixtures/test.html</loc>');
+        contents.should.containEql('<loc>http://www.amazon.com/fixtures/test.html</loc>');
         contents.should.containEql('<changefreq>daily</changefreq>');
         contents.should.containEql('<priority>0.5</priority>');
         contents.should.containEql('<lastmod>' + fileStat.mtime.toISOString() + '</lastmod>');
     });
 
     stream.on('end', cb);
-    var expectedLastmod = fs.statSync(testedFile).mtime;
+    expectedLastmod = fs.statSync(testedFile).mtime;
 
     stream.write(new gutil.File({
         cwd: __dirname,
@@ -38,7 +61,9 @@ it('should generate a sitemap.xml using default values', function (cb) {
 });
 
 it('should generate a sitemap.xml with correct html files included', function (cb) {
-    var stream = sitemap();
+    var stream = sitemap({
+        siteUrl: 'http://www.amazon.com'
+    });
 
     stream.on('data', function (data) {
         data.path.should.containEql('sitemap.xml');
@@ -58,7 +83,9 @@ it('should generate a sitemap.xml with correct html files included', function (c
 });
 
 it('should handle a case with no file.stats', function (cb) {
-    var stream = sitemap();
+    var stream = sitemap({
+        siteUrl: 'http://www.amazon.com'
+    });
     var expectedLastmod;
 
     stream.on('data', function (data) {
@@ -72,7 +99,7 @@ it('should handle a case with no file.stats', function (cb) {
 
     stream.on('end', cb);
 
-    var expectedLastmod = fs.statSync('test/fixtures/test.html').mtime;
+    expectedLastmod = fs.statSync('test/fixtures/test.html').mtime;
 
     stream.write(new gutil.File({
         cwd: __dirname,

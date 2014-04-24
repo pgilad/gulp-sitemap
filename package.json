@@ -17,6 +17,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "watchTest": "mocha -R spec --watch test/test.js",
     "test": "mocha test/test.js"
   },
   "main": "index.js",
