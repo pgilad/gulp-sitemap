@@ -14,11 +14,11 @@ Easily generate a search engine friendly sitemap.xml from your project.
 
 Install with [npm](https://npmjs.org/package/gulp-sitemap)
 
-```
-npm i -D gulp-sitemap
+```bash
+$ npm i -D gulp-sitemap
 
 #or use the long and tiring version:
-npm install --save-dev gulp-sitemap
+$ npm install --save-dev gulp-sitemap
 ```
 
 ## Example
