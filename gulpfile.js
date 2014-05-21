@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 var sitemap = require('./index');
 
-gulp.task('default', function () {
+gulp.task('default', function() {
     gulp.src(['test/fixtures/**/*.html'], {
         read: false
     }).pipe(sitemap({
