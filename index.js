@@ -21,12 +21,9 @@ module.exports = function (params) {
     var changeFreq = params.changeFreq || 'daily';
     //set default priority
     var priority = params.priority && params.priority.toString() || '0.5';
-    //set default base site url
     var siteUrl;
-
     //set xml spacing. can be \t for tabs
     var spacing = params.spacing || '    ';
-
     //array to hold lines of output sitemap.xml
     var xmlOutput = [].concat(xmlHeader);
 
@@ -39,11 +36,11 @@ module.exports = function (params) {
      * @param cb
      * @return
      */
-    var addFile = function (file, lastmod, cb) {
+    var addFile = function (filename, lastmod, cb) {
         //format mtime to ISO (same as +00:00)
         lastmod = new Date(lastmod).toISOString();
         //turn index.html into -> /
-        var relativeFile = file.relative.replace(/(index)\.(html?){1}$/, '', 'i');
+        var relativeFile = filename.replace(/(index)\.(html?){1}$/, '', 'i');
         //url location. Use slash to convert windows \\ or \ to /
         var loc = siteUrl + slash(relativeFile);
 
@@ -100,7 +97,7 @@ module.exports = function (params) {
                 //get modified time
                 var lastmod = file.stat.mtime;
                 //add file to xml
-                return addFile(file, lastmod, cb);
+                return addFile(file.relative, lastmod, cb);
             }
 
             //otherwise get it from file using fs
@@ -117,11 +114,12 @@ module.exports = function (params) {
                 }
 
                 //add file to xml
-                return addFile(file, stats.mtime, cb);
+                return addFile(file.relative, stats.mtime, cb);
             }.bind(this));
         },
         function (cb) {
             if (!firstFile) {
+                //no files
                 return cb();
             }
             //close off urlset
