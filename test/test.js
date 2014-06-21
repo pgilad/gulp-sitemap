@@ -1,3 +1,4 @@
+/* global it */
 'use strict';
 var should = require('should');
 var gutil = require('gulp-util');
@@ -5,25 +6,14 @@ var gulp = require('gulp');
 var fs = require('fs');
 var sitemap = require('../index');
 
-it('should throw if not provided with site url', function (cb) {
-    var stream = sitemap();
-    var testedFile = 'test/fixtures/test.html';
-
-    stream.on('error', function (err) {
-        should.exist(err);
-        err.name.should.equal('Error');
-        err.message.should.equal('siteUrl is a required param');
-        cb();
-    });
-
-    stream.write(new gutil.File({
-        cwd: __dirname,
-        base: __dirname,
-        path: testedFile,
-        contents: new Buffer('hello there')
-    }));
-
-    stream.end();
+it('should throw if not provided with site url', function () {
+    try {
+        sitemap();
+    } catch (e) {
+        e.should.containEql({
+            message: 'siteUrl is a required param'
+        });
+    }
 });
 
 it('should generate a sitemap.xml using default values', function (cb) {
