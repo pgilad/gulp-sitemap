@@ -34,8 +34,8 @@ module.exports = function (params) {
     var firstFile, entries = [];
 
     return through.obj(function (file, enc, cb) {
-            //pass through empty files but not html
-            if (file.isNull() && !/\.html?$/.test(path.extname(file.path))) {
+            //we handle null files (that have no contents), but not dirs
+            if (file.isDirectory()) {
                 this.push(file);
                 return cb();
             }
