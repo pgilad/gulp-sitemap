@@ -86,9 +86,9 @@ spaces if you'd like.
 
 Type: `String`
 
-Default: '    '
+Default: `    ` (4 spaces)
 
-## Example usage with all default options
+## Example usage with default options
 
 ```js
 var gulp = require('gulp');
