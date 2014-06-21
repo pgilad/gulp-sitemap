@@ -3,7 +3,6 @@
 
 [![NPM version](http://img.shields.io/npm/v/gulp-sitemap.svg?style=flat)](https://www.npmjs.org/package/gulp-sitemap)
 [![NPM Downloads](http://img.shields.io/npm/dm/gulp-sitemap.svg?style=flat)](https://www.npmjs.org/package/gulp-sitemap)
-[![Dependencies](http://img.shields.io/gemnasium/pgilad/gulp-sitemap.svg?style=flat)](https://gemnasium.com/pgilad/gulp-sitemap)
 [![Build Status](http://img.shields.io/travis/pgilad/gulp-sitemap/master.svg?style=flat)](https://travis-ci.org/pgilad/gulp-sitemap)
 
 Easily generate a search engine friendly sitemap.xml from your project.
@@ -15,9 +14,6 @@ Easily generate a search engine friendly sitemap.xml from your project.
 Install with [npm](https://npmjs.org/package/gulp-sitemap)
 
 ```bash
-$ npm i -D gulp-sitemap
-
-#or use the long and tiring version:
 $ npm install --save-dev gulp-sitemap
 ```
 
@@ -32,16 +28,68 @@ gulp.task('sitemap', function () {
         read: false
     }).pipe(sitemap({
             siteUrl: 'http://www.amazon.com'
-        }))
-        .pipe(gulp.dest('build/'));
+    }))
+    .pipe(gulp.dest('build/'));
 });
 ```
 
-* File content isn't necessary when reading files - so to speed up building - use `{read:false}` on `gulp.src`.
+* File content isn't necessary when reading files. To speed up building use `{read:false}` with `gulp.src`.
 * *index.html* will be turned into directory path `/`.
 * *404.html* will be skipped automatically. No need to unglob it.
 
-## Example with all options and their defaults
+## Options
+
+### siteUrl
+
+**required**
+
+Your website's base url. This gets prepended to all documents locations.
+
+Type: `String`
+
+### fileName
+
+Determine the output filename for the sitemap.
+
+Type: `String`
+
+Default: `sitemap.xml`
+
+### changeFreq
+
+Gets filled inside the sitemap in the tag `<changefreq>`.
+
+Type: `String`
+
+Default: `daily`
+
+### priority
+
+Gets filled inside the sitemap in the tag `<priority>`.
+
+Type: `String`
+
+Default: `0.5`
+
+### newLine
+
+How to join line in the target sitemap file.
+
+Type: `String`
+
+Default: Your OS's new line, mostly: `\n`
+
+### spacing
+
+How should the sitemap xml file be spaced. You can use `\t` for tabs, or `  ` with 2
+spaces if you'd like.
+
+Type: `String`
+
+Default: '    '
+
+## Example usage with all default options
+
 ```js
 var gulp = require('gulp');
 var sitemap = require('gulp-sitemap');
@@ -54,52 +102,12 @@ gulp.task('sitemap', function () {
         newLine: '\n',
         changeFreq: 'daily',
         priority: '0.5',
-        siteUrl: 'http://www.amazon.com',
+        siteUrl: '', // no default - this is a required param
         spacing: '    '
         }))
     .pipe(gulp.dest('build/'));
 });
 ```
-
-## Options
-
-### siteUrl
-
-**required**
-
-Your website's base url. This gets prepended to all documents locations.
-
-### fileName
-
-Default: `sitemap.xml`
-
-Determine the output filename for the sitemap.
-
-
-### changeFreq
-
-Default: `daily`
-
-Gets filled inside the sitemap in the tag `<changefreq>`.
-
-### priority
-
-Default: `0.5`
-
-Gets filled inside the sitemap in the tag `<priority>`.
-
-### newLine
-
-Default: Your OS's new line, mostly: `\n`
-
-How to join line in the target sitemap file.
-
-### spacing
-
-Default: '    '
-
-How should the sitemap xml file be spaced. You can use `\t` for tabs, or `  ` with 2
-spaces if you'd like.
 
 ## Thanks
 
