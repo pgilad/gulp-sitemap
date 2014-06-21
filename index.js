@@ -34,8 +34,8 @@ module.exports = function (params) {
     var firstFile, entries = [];
 
     return through.obj(function (file, enc, cb) {
-            //pass through empty file
-            if (file.isNull()) {
+            //pass through empty files but not html
+            if (file.isNull() && !/\.html?$/.test(path.extname(file.path))) {
                 this.push(file);
                 return cb();
             }
@@ -86,8 +86,8 @@ module.exports = function (params) {
             //create and push new vinyl file for sitemap
             this.push(new gutil.File({
                 cwd: firstFile.cwd,
-                base: firstFile.base,
-                path: path.join(firstFile.base, config.fileName),
+                base: firstFile.cwd,
+                path: path.join(firstFile.cwd, config.fileName),
                 contents: new Buffer(sitemap.prepareSitemap(entries, config))
             }));
 
