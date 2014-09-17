@@ -94,17 +94,16 @@ var gulp = require('gulp');
 var sitemap = require('gulp-sitemap');
 
 gulp.task('sitemap', function () {
-    gulp.src('build/**/*.html', {
-        read: false
-    }).pipe(sitemap({
-        fileName: 'sitemap.xml',
-        newLine: '\n',
-        changeFreq: 'daily',
-        priority: '0.5',
-        siteUrl: '', // no default - this is a required param
-        spacing: '    '
+    gulp.src('build/**/*.html')
+        .pipe(sitemap({
+            fileName: 'sitemap.xml',
+            newLine: '\n',
+            changeFreq: 'daily',
+            priority: '0.5',
+            siteUrl: '', // no default - this is a required param
+            spacing: '    '
         }))
-    .pipe(gulp.dest('build/'));
+    .pipe(gulp.dest('./build'));
 });
 ```
 
