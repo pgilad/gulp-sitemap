@@ -7,10 +7,12 @@ var through = require('through2');
 var defaults = require('lodash.defaults');
 var sitemap = require('./lib/sitemap');
 
+var pluginName = 'gulp-sitemap';
+
 module.exports = function (params) {
     params = params || {};
     if (!params.siteUrl) {
-        throw new gutil.PluginError('gulp-todo', 'siteUrl is a required param');
+        throw new gutil.PluginError(pluginName, 'siteUrl is a required param');
     }
     var config = defaults(params, {
         //set newline separator
@@ -42,7 +44,7 @@ module.exports = function (params) {
 
             //we don't handle streams for now
             if (file.isStream()) {
-                this.emit('error', new gutil.PluginError('gulp-sitemap', 'Streaming not supported'));
+                this.emit('error', new gutil.PluginError(pluginName, 'Streaming not supported'));
                 return cb();
             }
 
@@ -70,7 +72,7 @@ module.exports = function (params) {
                         return cb();
                     }
                     err = err || 'No stats found for file ' + file.path;
-                    this.emit('error', new gutil.PluginError('gulp-sitemap', err));
+                    this.emit('error', new gutil.PluginError(pluginName, err));
                     return cb();
                 }
                 //add file to xml
@@ -91,7 +93,6 @@ module.exports = function (params) {
                 contents: new Buffer(sitemap.prepareSitemap(entries, config))
             }));
 
-            gutil.log('Generated', gutil.colors.blue(config.fileName));
             return cb();
         });
 };

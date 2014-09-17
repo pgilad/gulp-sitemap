@@ -24,18 +24,17 @@ var gulp = require('gulp');
 var sitemap = require('gulp-sitemap');
 
 gulp.task('sitemap', function () {
-    gulp.src('build/**/*.html', {
-        read: false
-    }).pipe(sitemap({
+    gulp.src('build/**/*.html')
+        .pipe(sitemap({
             siteUrl: 'http://www.amazon.com'
-    }))
-    .pipe(gulp.dest('build/'));
+        }))
+        .pipe(gulp.dest('./build'));
 });
 ```
 
-* File content isn't necessary when reading files. To speed up building use `{read:false}` with `gulp.src`.
-* *index.html* will be turned into directory path `/`.
-* *404.html* will be skipped automatically. No need to unglob it.
+* `siteUrl` is required.
+* `index.html` will be turned into directory path `/`.
+* `404.html` will be skipped automatically. No need to unglob it.
 
 ## Options
 
