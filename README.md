@@ -103,7 +103,7 @@ gulp.task('sitemap', function () {
             siteUrl: '', // no default - this is a required param
             spacing: '    '
         }))
-    .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build'));
 });
 ```
 
