@@ -22,7 +22,9 @@ module.exports = function (params) {
         //set xml spacing. can be \t for tabs
         spacing: '    ',
         //set default priority
-        priority: '0.5'
+        priority: '0.5',
+        //whether to log output
+        log: false
     });
     //enforce priority to be a string
     config.priority = config.priority.toString();
@@ -91,7 +93,9 @@ module.exports = function (params) {
                 contents: new Buffer(sitemap.prepareSitemap(entries, config))
             }));
 
-            gutil.log('Generated', gutil.colors.blue(config.fileName));
+            if (config.log === true) {
+                gutil.log('Generated', gutil.colors.blue(config.fileName));
+            }
             return cb();
         });
 };
