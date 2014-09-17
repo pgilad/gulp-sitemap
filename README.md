@@ -88,6 +88,14 @@ Type: `String`
 
 Default: `    ` (4 spaces)
 
+### log
+
+Whether Gulp should log output i.e. `Generated sitemap.xml`
+
+Type: `Boolean`
+
+Default: `false`
+
 ## Example usage with default options
 
 ```js
