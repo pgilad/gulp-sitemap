@@ -42,7 +42,7 @@
     "gulp-util": "^3.0.1",
     "lodash.defaults": "^2.4.1",
     "slash": "^1.0.0",
-    "through2": "^0.6.2"
+    "through2": "^0.6.3"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
