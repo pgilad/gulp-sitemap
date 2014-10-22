@@ -107,6 +107,10 @@ gulp.task('sitemap', function () {
 });
 ```
 
+## Complementery plugins
+
+- [gulp-sitemap-files](https://github.com/adam-lynch/gulp-sitemap-files) - Get all files listed in a sitemap (Perhaps one generated from this plugin)
+
 ## Thanks
 
 To [grunt-sitemap](https://github.com/RayViljoen/grunt-sitemap) for the inspiration on writing this.
