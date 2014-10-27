@@ -107,7 +107,7 @@ gulp.task('sitemap', function () {
 });
 ```
 
-## Complementery plugins
+## Complementary plugins
 
 - [gulp-sitemap-files](https://github.com/adam-lynch/gulp-sitemap-files) - Get all files listed in a sitemap (Perhaps one generated from this plugin)
 
@@ -117,4 +117,4 @@ To [grunt-sitemap](https://github.com/RayViljoen/grunt-sitemap) for the inspirat
 
 ## License
 
-MIT ©2014 **Gilad Peleg**
+MIT ©[Gilad Peleg](http://giladpeleg.com)

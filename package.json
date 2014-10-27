@@ -1,52 +1,47 @@
 {
-  "name": "gulp-sitemap",
-  "version": "0.8.0",
-  "description": "Generate a search engine friendly sitemap.xml using a Gulp stream",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pgilad/gulp-sitemap"
-  },
-  "homepage": "https://github.com/pgilad/gulp-sitemap",
-  "bugs": "https://github.com/pgilad/gulp-sitemap/issues",
-  "author": {
-    "name": "Gilad Peleg",
-    "email": "giladp007@gmail.com"
-  },
-  "engines": {
-    "node": ">=0.10.0"
-  },
-  "files": [
-    "index.js",
-    "LICENSE.md",
-    "lib"
-  ],
-  "scripts": {
-    "watchTest": "mocha -R spec --watch test/test.js",
-    "test": "mocha test/test.js -R spec"
-  },
-  "main": "index.js",
-  "keywords": [
-    "gulpplugin",
-    "gulp",
-    "js",
-    "javascript",
-    "seo",
-    "sitemap",
-    "sitemap.xml",
-    "google",
-    "search-engine",
-    "xml"
-  ],
-  "dependencies": {
-    "gulp-util": "^3.0.1",
-    "lodash.defaults": "^2.4.1",
-    "slash": "^1.0.0",
-    "through2": "^0.6.3"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.9",
-    "mocha": "*",
-    "should": "*"
-  }
+    "name": "gulp-sitemap",
+    "version": "0.8.0",
+    "description": "Generate a search engine friendly sitemap.xml using a Gulp stream",
+    "repository": "pgilad/gulp-sitemap",
+    "license": "MIT",
+    "author": {
+        "name": "Gilad Peleg",
+        "email": "giladp007@gmail.com",
+        "url": "http://giladpeleg.com"
+    },
+    "main": "index.js",
+    "files": [
+        "index.js",
+        "lib"
+    ],
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "scripts": {
+        "watchTest": "mocha -R spec --watch test/test.js",
+        "test": "mocha test/test.js -R spec"
+    },
+    "keywords": [
+        "gulpplugin",
+        "gulp",
+        "js",
+        "javascript",
+        "SEO",
+        "sitemap",
+        "sitemap.xml",
+        "Google",
+        "search-engine",
+        "xml"
+    ],
+    "dependencies": {
+        "gulp-util": "^3.0.1",
+        "lodash.defaults": "^2.4.1",
+        "slash": "^1.0.0",
+        "through2": "^0.6.3"
+    },
+    "devDependencies": {
+        "gulp": "^3.8.9",
+        "mocha": "*",
+        "should": "*"
+    }
 }
