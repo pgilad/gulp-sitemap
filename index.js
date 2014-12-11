@@ -32,7 +32,8 @@ module.exports = function (options) {
     var firstFile;
 
     return through.obj(function (file, enc, cb) {
-            if (file.isNull()) {
+            //we handle null files (that have no contents), but not dirs
+            if (file.isDirectory()) {
                 cb(null, file);
                 return;
             }
@@ -49,16 +50,8 @@ module.exports = function (options) {
             }
 
             firstFile = firstFile || file;
-            var lastmod;
-            if (config.lastmod !== null) {
-                lastmod = config.lastmod;
-            } else {
-                lastmod = file.stat && file.stat.mtime || Date.now();
-            }
-            entries.push({
-                file: file.relative,
-                lastmod: lastmod
-            });
+            var entry = sitemap.getEntryConfig(file.relative, file.stat && file.stat.mtime, config);
+            entries.push(entry);
             cb();
         },
         function (cb) {

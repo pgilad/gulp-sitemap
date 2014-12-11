@@ -79,7 +79,7 @@ Required: `false`
 
 ### changefreq
 
-Gets filled inside the sitemap in the tag `<changefreq>`.
+Gets filled inside the sitemap in the tag `<changefreq>`. Not added by default.
 
 Type: `string`
 
@@ -87,23 +87,39 @@ Default: `null`
 
 Valid Values: `['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']`
 
-**Note: any falsey value is also valid and will skip this xml tag**
-
 Required: `false`
+
+**Note: any falsey value is also valid and will skip this xml tag**
 
 ### priority
 
-Gets filled inside the sitemap in the tag `<priority>`.
+Gets filled inside the sitemap in the tag `<priority>`. Not added by default.
 
 Type: `string`
 
 Default: `null`
 
-Valid Values: 0.0 to 1.0
+Valid Values: `0.0` to `1.0`
+
+Required: `false`
 
 **Note: any falsey (non-zero) value is also valid and will skip this xml tag**
 
+### lastmod
+
+The file last modified time.
+
+ If `null` then this plugin will try to get the last modified time from the stream vinyl file, or use `Date.now()` as lastmod.
+
+If the value is not `null` - It will be used as lastmod. That gives the user the ability to manually set the `lastmod`.
+
+Type: `string|Datetime`
+
+Default: `null`
+
 Required: `false`
+
+**Note: any falsey (other than null) value is also valid and will skip this xml tag**
 
 ### newLine
 
@@ -126,25 +142,50 @@ Default: `    ` (4 spaces)
 
 Required: `false`
 
-## Example usage with default options
+### mappings
+
+An object to custom map pages to their own configuration.
+
+This should be an array with the following structure:
+
+Type: `array`
+
+Default: `[]`
+
+Required: `false`
+
+Example:
 
 ```js
-var gulp = require('gulp');
-var sitemap = require('gulp-sitemap');
-
-gulp.task('sitemap', function () {
-    gulp.src('build/**/*.html')
-        .pipe(sitemap({
-            siteUrl: 'http://someurl.com'
-            fileName: 'sitemap.xml',
-            newLine: '\n',
-            changefreq: 'daily',
-            priority: '0.5',
-            spacing: '    '
-        }))
-        .pipe(gulp.dest('./build'));
-});
+mappings: [{
+    pages: [ 'minimatch pattern' ],
+    changefreq: 'hourly',
+    priority: 0.5,
+    lastmod: Date.now()
+},
+//....
+]
 ```
+
+- Every file will be matched against the supplied patterns
+- Only defined attributes for a matched file are applied.
+- Only the first match will apply, so consequent matches for the filename will not apply.
+- Possible attributes to override: `changefreq`,  `priority` and `lastmod`.
+- All rules applying to [options](#options) apply to the attributes that can overridden.
+
+#### pages
+
+Type: `array`
+
+Required: `true`
+
+This is an array with [minimatch](https://github.com/isaacs/minimatch) patterns to match the
+relevant pages to override.
+Every file will be matched against the supplied patterns.
+
+Uses [multimatch](https://github.com/sindresorhus/multimatch) to match patterns against filenames.
+
+Example: `pages: ['home/index.html', 'home/see-*.html', '!home/see-admin.html']`
 
 ## Complementary plugins
 

@@ -3,19 +3,19 @@
     <url>
         <loc>http://www.amazon.com/</loc>
         <lastmod>2014-06-21T20:51:20.000Z</lastmod>
-        <changefreq>daily</changefreq>
+        <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>http://www.amazon.com/test.html</loc>
         <lastmod>2014-06-21T20:51:20.000Z</lastmod>
-        <changefreq>daily</changefreq>
+        <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>http://www.amazon.com/nested/article.html</loc>
         <lastmod>2014-06-21T20:51:20.000Z</lastmod>
-        <changefreq>daily</changefreq>
+        <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
 </urlset>

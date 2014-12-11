@@ -170,7 +170,7 @@ describe('general settings', function () {
             // get generated timestamp
             var time = contents.match(/<lastmod>(.+)<\/lastmod>/i)[1];
             // make sure the tag exists
-            contents.should.containEql('<lastmod>' + new Date(time).toISOString() + '</lastmod>');
+            contents.should.containEql('<lastmod>' + time + '</lastmod>');
         }).on('end', cb);
 
         stream.write(new gutil.File({

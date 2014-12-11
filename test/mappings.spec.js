@@ -127,4 +127,44 @@ describe('mappings', function () {
         stream.write(new gutil.File(dummyFile));
         stream.end();
     });
+
+    it('should not set last mod with mappings', function (cb) {
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            lastmod: false,
+            mappings: [{
+                pages: ['*/*test.html'],
+                lastmod: false,
+            }]
+        });
+
+        stream.on('data', function (data) {
+            var contents = data.contents.toString();
+            contents.should.not.containEql('<lastmod>');
+        }).on('end', cb);
+
+        stream.write(new gutil.File(dummyFile));
+        stream.end();
+    });
+
+    it('should set last mod with mappings', function (cb) {
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            lastmod: false,
+            mappings: [{
+                pages: ['*/*test.html'],
+                lastmod: null,
+            }]
+        });
+
+        stream.on('data', function (data) {
+            var contents = data.contents.toString();
+            var time = contents.match(/<lastmod>(.+)<\/lastmod>/i)[1];
+            // make sure the tag exists
+            contents.should.containEql('<lastmod>' + time + '</lastmod>');
+        }).on('end', cb);
+
+        stream.write(new gutil.File(dummyFile));
+        stream.end();
+    });
 });
