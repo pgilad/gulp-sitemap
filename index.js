@@ -1,35 +1,39 @@
 'use strict';
-/* needed to get mstats of a file parsed with data only */
-var fs = require('fs');
 var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through2');
 var defaults = require('lodash.defaults');
 var sitemap = require('./lib/sitemap');
 var pluginName = 'gulp-sitemap';
+var chalk = require('chalk');
 
-module.exports = function(params) {
-    var config = defaults(params || {}, {
+module.exports = function (options) {
+    var config = defaults(options || {}, {
         newLine: gutil.linefeed,
         fileName: 'sitemap.xml',
-        changeFreq: 'daily',
+        changefreq: null,
         spacing: '    ',
-        priority: '0.5'
+        priority: null,
+        lastmod: null,
+        mappings: []
     });
+
     if (!config.siteUrl) {
         throw new gutil.PluginError(pluginName, 'siteUrl is a required param');
     }
-    config.priority = config.priority.toString();
+    if (options.changeFreq) {
+        gutil.log(pluginName, chalk.magenta('changeFreq') + ' has been deprecated. Please use ' + chalk.cyan('changefreq'));
+        config.changefreq = options.changeFreq;
+    }
     if (config.siteUrl.slice(-1) !== '/') {
         config.siteUrl += '/';
     }
     var entries = [];
     var firstFile;
 
-    return through.obj(function(file, enc, cb) {
-            //we handle null files (that have no contents), but not dirs
-            if (file.isDirectory()) {
-                cb(file);
+    return through.obj(function (file, enc, cb) {
+            if (file.isNull()) {
+                cb(null, file);
                 return;
             }
 
@@ -45,43 +49,31 @@ module.exports = function(params) {
             }
 
             firstFile = firstFile || file;
-            //if file has stat.mtime use it
-            if (file.stat && file.stat.mtime) {
-                entries = entries.concat(sitemap.processFile(file.relative, file.stat.mtime, config));
-                cb();
-                return;
+            var lastmod;
+            if (config.lastmod !== null) {
+                lastmod = config.lastmod;
+            } else {
+                lastmod = file.stat && file.stat.mtime || Date.now();
             }
-
-            //otherwise get it from file using fs
-            fs.stat(file.path, function(err, stats) {
-                if (err || !stats || !stats.mtime) {
-                    //file not found - skip it
-                    if (err.code === 'ENOENT') {
-                        cb();
-                        return;
-                    }
-                    err = err || 'No stats found for file ' + file.path;
-                    cb(new gutil.PluginError(pluginName, err));
-                    return;
-                }
-                //add file to xml
-                entries = entries.concat(sitemap.processFile(file.relative, stats.mtime, config));
-                cb();
-            }.bind(this));
+            entries.push({
+                file: file.relative,
+                lastmod: lastmod
+            });
+            cb();
         },
-        function(cb) {
+        function (cb) {
             if (!firstFile) {
                 cb();
                 return;
             }
+            var contents = sitemap.prepareSitemap(entries, config);
             //create and push new vinyl file for sitemap
             this.push(new gutil.File({
                 cwd: firstFile.cwd,
                 base: firstFile.cwd,
                 path: path.join(firstFile.cwd, config.fileName),
-                contents: new Buffer(sitemap.prepareSitemap(entries, config))
+                contents: new Buffer(contents)
             }));
-
             cb();
         });
 };

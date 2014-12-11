@@ -9,6 +9,8 @@ Easily generate a search engine friendly sitemap.xml from your project.
 
 :bowtie: Search engines love the sitemap.xml and it helps SEO as well.
 
+For information about sitemap properties and structure, see the [wiki for sitemaps](http://www.wikiwand.com/en/Sitemaps)
+
 ## Install
 
 Install with [npm](https://npmjs.org/package/gulp-sitemap)
@@ -59,52 +61,70 @@ gulp.task('html', function() {
 
 ### siteUrl
 
-**required**
-
 Your website's base url. This gets prepended to all documents locations.
 
-Type: `String`
+Type: `string`
+
+Required: `true`
 
 ### fileName
 
 Determine the output filename for the sitemap.
 
-Type: `String`
+Type: `string`
 
 Default: `sitemap.xml`
 
-### changeFreq
+Required: `false`
+
+### changefreq
 
 Gets filled inside the sitemap in the tag `<changefreq>`.
 
-Type: `String`
+Type: `string`
 
-Default: `daily`
+Default: `null`
+
+Valid Values: `['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']`
+
+**Note: any falsey value is also valid and will skip this xml tag**
+
+Required: `false`
 
 ### priority
 
 Gets filled inside the sitemap in the tag `<priority>`.
 
-Type: `String`
+Type: `string`
 
-Default: `0.5`
+Default: `null`
+
+Valid Values: 0.0 to 1.0
+
+**Note: any falsey (non-zero) value is also valid and will skip this xml tag**
+
+Required: `false`
 
 ### newLine
 
 How to join line in the target sitemap file.
 
-Type: `String`
+Type: `string`
 
 Default: Your OS's new line, mostly: `\n`
+
+Required: `false`
 
 ### spacing
 
 How should the sitemap xml file be spaced. You can use `\t` for tabs, or `  ` with 2
 spaces if you'd like.
 
-Type: `String`
+Type: `string`
 
 Default: `    ` (4 spaces)
+
+Required: `false`
 
 ## Example usage with default options
 
@@ -115,11 +135,11 @@ var sitemap = require('gulp-sitemap');
 gulp.task('sitemap', function () {
     gulp.src('build/**/*.html')
         .pipe(sitemap({
+            siteUrl: 'http://someurl.com'
             fileName: 'sitemap.xml',
             newLine: '\n',
-            changeFreq: 'daily',
+            changefreq: 'daily',
             priority: '0.5',
-            siteUrl: '', // no default - this is a required param
             spacing: '    '
         }))
         .pipe(gulp.dest('./build'));
