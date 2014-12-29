@@ -38,7 +38,7 @@
     "gulp-util": "^3.0.1",
     "lodash.contains": "^2.4.1",
     "lodash.defaults": "^2.4.1",
-    "multimatch": "^1.0.1",
+    "multimatch": "^2.0.0",
     "slash": "^1.0.0",
     "through2": "^0.6.3"
   },
