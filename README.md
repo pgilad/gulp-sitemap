@@ -187,6 +187,16 @@ Uses [multimatch](https://github.com/sindresorhus/multimatch) to match patterns 
 
 Example: `pages: ['home/index.html', 'home/see-*.html', '!home/see-admin.html']`
 
+#### verbose
+
+Type: `boolean`
+
+Required: `false`
+
+Default: `false`
+
+If true, will log the number of files that where handled.
+
 ## Complementary plugins
 
 - [gulp-sitemap-files](https://github.com/adam-lynch/gulp-sitemap-files) - Get all files listed in a sitemap (Perhaps one generated from this plugin)

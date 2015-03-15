@@ -15,7 +15,8 @@ module.exports = function (options) {
         spacing: '    ',
         priority: null,
         lastmod: null,
-        mappings: []
+        mappings: [],
+        verbose: false
     });
 
     if (!config.siteUrl) {
@@ -31,35 +32,34 @@ module.exports = function (options) {
     var entries = [];
     var firstFile;
 
-    return through.obj(function (file, enc, cb) {
+    return through.obj(function (file, enc, callback) {
             //we handle null files (that have no contents), but not dirs
             if (file.isDirectory()) {
-                cb(null, file);
-                return;
+                return callback(null, file);
             }
 
             if (file.isStream()) {
-                cb(new gutil.PluginError(pluginName, 'Streaming not supported'));
-                return;
+                return callback(new gutil.PluginError(pluginName, 'Streaming not supported'));
             }
 
             //skip 404 file
             if (/404\.html?$/i.test(file.relative)) {
-                cb();
-                return;
+                return callback();
             }
 
             firstFile = firstFile || file;
             var entry = sitemap.getEntryConfig(file.relative, file.stat && file.stat.mtime, config);
             entries.push(entry);
-            cb();
+            callback();
         },
-        function (cb) {
+        function (callback) {
             if (!firstFile) {
-                cb();
-                return;
+                return callback();
             }
             var contents = sitemap.prepareSitemap(entries, config);
+            if (options.verbose) {
+                gutil.log(pluginName, 'Files in sitemap:', entries.length);
+            }
             //create and push new vinyl file for sitemap
             this.push(new gutil.File({
                 cwd: firstFile.cwd,
@@ -67,6 +67,6 @@ module.exports = function (options) {
                 path: path.join(firstFile.cwd, config.fileName),
                 contents: new Buffer(contents)
             }));
-            cb();
+            callback();
         });
 };

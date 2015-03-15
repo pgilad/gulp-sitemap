@@ -182,4 +182,43 @@ describe('general settings', function () {
         }));
         stream.end();
     });
+
+    it('should apply the verbose option', function (cb) {
+
+        var write = process.stdout.write;
+        var output = [];
+        process.stdout.write = (function (stub) {
+            return function (string) {
+                // stub.apply(process.stdout, arguments);
+                output.push(string);
+            };
+        })(process.stdout.write);
+
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            verbose: true
+        });
+
+        stream.on('data', function () {
+            console.log(arguments);
+        });
+
+        stream.on('end', function () {
+            process.stdout.write = write;
+            var msgs = chalk.stripColor(output.join('\n'));
+            msgs.should.containEql('Files in sitemap: 2');
+            cb();
+        });
+
+        var testFile2 = {
+            cwd: __dirname,
+            base: __dirname,
+            path: 'test/fixtures/test2.html',
+            contents: new Buffer('hello there')
+        };
+
+        stream.write(new gutil.File(testFile));
+        stream.write(new gutil.File(testFile2));
+        stream.end();
+    });
 });
