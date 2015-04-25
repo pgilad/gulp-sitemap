@@ -18,19 +18,22 @@ module.exports = function (options) {
         mappings: [],
         verbose: false
     });
+    var entries = [];
+    var firstFile;
+    var msg;
 
     if (!config.siteUrl) {
-        throw new gutil.PluginError(pluginName, 'siteUrl is a required param');
+        msg = 'siteUrl is a required param';
+        throw new gutil.PluginError(pluginName, msg);
     }
     if (options.changeFreq) {
-        gutil.log(pluginName, chalk.magenta('changeFreq') + ' has been deprecated. Please use ' + chalk.cyan('changefreq'));
+        msg = chalk.magenta('changeFreq') + ' has been deprecated. Please use ' + chalk.cyan('changefreq');
+        gutil.log(pluginName, msg);
         config.changefreq = options.changeFreq;
     }
     if (config.siteUrl.slice(-1) !== '/') {
-        config.siteUrl += '/';
+        config.siteUrl = config.siteUrl + '/';
     }
-    var entries = [];
-    var firstFile;
 
     return through.obj(function (file, enc, callback) {
             //we handle null files (that have no contents), but not dirs
@@ -39,7 +42,8 @@ module.exports = function (options) {
             }
 
             if (file.isStream()) {
-                return callback(new gutil.PluginError(pluginName, 'Streaming not supported'));
+                msg = 'Streaming not supported';
+                return callback(new gutil.PluginError(pluginName), msg);
             }
 
             //skip 404 file
@@ -47,8 +51,11 @@ module.exports = function (options) {
                 return callback();
             }
 
-            firstFile = firstFile || file;
-            var entry = sitemap.getEntryConfig(file.relative, file.stat && file.stat.mtime, config);
+            if (!firstFile) {
+                firstFile = file;
+            }
+            var mtime = file.stat ? file.stat.mtime : null;
+            var entry = sitemap.getEntryConfig(file.relative, mtime, config);
             entries.push(entry);
             callback();
         },
@@ -58,7 +65,8 @@ module.exports = function (options) {
             }
             var contents = sitemap.prepareSitemap(entries, config);
             if (options.verbose) {
-                gutil.log(pluginName, 'Files in sitemap:', entries.length);
+                msg = 'Files in sitemap: ' + entries.length;
+                gutil.log(pluginName, msg);
             }
             //create and push new vinyl file for sitemap
             this.push(new gutil.File({

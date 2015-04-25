@@ -34,17 +34,17 @@
     "xml"
   ],
   "dependencies": {
-    "chalk": "^0.5.1",
-    "gulp-util": "^3.0.1",
-    "lodash.contains": "^2.4.1",
-    "lodash.defaults": "^2.4.1",
+    "chalk": "^1.0.0",
+    "gulp-util": "^3.0.4",
+    "lodash.defaults": "^3.1.1",
+    "lodash.includes": "^3.1.1",
     "multimatch": "^2.0.0",
     "slash": "^1.0.0",
-    "through2": "^0.6.3"
+    "through2": "^0.6.5"
   },
   "devDependencies": {
-    "gulp": "^3.8.10",
-    "mocha": "*",
-    "should": "*"
+    "gulp": "^3.8.11",
+    "mocha": "^2.2.4",
+    "should": "^6.0.1"
   }
 }
