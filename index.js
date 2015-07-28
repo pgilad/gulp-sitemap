@@ -9,13 +9,13 @@ var chalk = require('chalk');
 
 module.exports = function (options) {
     var config = defaults(options || {}, {
-        newLine: gutil.linefeed,
-        fileName: 'sitemap.xml',
         changefreq: null,
-        spacing: '    ',
-        priority: null,
+        fileName: 'sitemap.xml',
         lastmod: null,
         mappings: [],
+        newLine: gutil.linefeed,
+        priority: null,
+        spacing: '    ',
         verbose: false
     });
     var entries = [];

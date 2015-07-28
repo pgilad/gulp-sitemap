@@ -1,10 +1,12 @@
 /* global it,describe */
 'use strict';
 var fs = require('fs');
-var should = require('should');
-var gutil = require('gulp-util');
-var gulp = require('gulp');
+
 var chalk = require('chalk');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var rename = require('gulp-rename');
+var should = require('should');
 var sitemap = require('../index');
 
 describe('general settings', function () {
@@ -188,6 +190,7 @@ describe('general settings', function () {
         var write = process.stdout.write;
         var output = [];
         process.stdout.write = (function (stub) {
+            // jshint unused:false
             return function (string) {
                 // stub.apply(process.stdout, arguments);
                 output.push(string);
@@ -220,5 +223,28 @@ describe('general settings', function () {
         stream.write(new gutil.File(testFile));
         stream.write(new gutil.File(testFile2));
         stream.end();
+    });
+
+    it('should generate a sitemap without extensions', function (cb) {
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com'
+        });
+
+        stream.on('data', function (data) {
+            data.path.should.containEql('sitemap.xml');
+            var contents = data.contents.toString();
+
+            contents.should.containEql('test');
+            contents.should.containEql('nested/article');
+            contents.should.not.containEql('test.html');
+            contents.should.not.containEql('article.html');
+        });
+
+        stream.on('end', cb);
+        gulp.src('test/fixtures/**/*.html')
+        .pipe(rename({
+            extname: ''
+        }))
+        .pipe(stream);
     });
 });
