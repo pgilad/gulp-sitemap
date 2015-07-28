@@ -16,7 +16,8 @@ module.exports = function (options) {
         priority: null,
         lastmod: null,
         mappings: [],
-        verbose: false
+        verbose: false,
+        cleanUrls: false
     });
     var entries = [];
     var firstFile;

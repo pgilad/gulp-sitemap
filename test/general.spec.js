@@ -221,4 +221,24 @@ describe('general settings', function () {
         stream.write(new gutil.File(testFile2));
         stream.end();
     });
+
+    it('should allow clean urls', function (cb) {
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            changefreq: 'daily',
+            priority: '0.5',
+            lastmod: '',
+            cleanUrls: true
+        });
+
+        stream.on('data', function (data) {
+            var contents = data.contents.toString();
+            var unCleanPath = testFile.path.split('/').pop();
+
+            contents.should.not.containEql(unCleanPath);
+        }).on('end', cb);
+
+        stream.write(new gutil.File(testFile));
+        stream.end();
+    });
 });
