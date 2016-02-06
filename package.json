@@ -34,11 +34,11 @@
     "xml"
   ],
   "dependencies": {
-    "chalk": "^1.0.0",
-    "gulp-util": "^3.0.4",
-    "lodash.defaults": "^3.1.1",
+    "chalk": "^1.1.1",
+    "gulp-util": "^3.0.7",
+    "lodash.defaults": "^4.0.1",
     "lodash.find": "^4.0.2",
-    "lodash.includes": "^3.1.2",
+    "lodash.includes": "^4.0.1",
     "lodash.pick": "^4.0.1",
     "multimatch": "^2.0.0",
     "slash": "^1.0.0",
@@ -48,6 +48,6 @@
     "gulp": "^3.8.11",
     "gulp-rename": "^1.2.2",
     "mocha": "^2.2.4",
-    "should": "^7.0.2"
+    "should": "^8.2.1"
   }
 }
