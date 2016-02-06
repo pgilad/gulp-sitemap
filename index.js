@@ -1,20 +1,21 @@
 'use strict';
-var path = require('path');
-var gutil = require('gulp-util');
-var through = require('through2');
-var defaults = require('lodash.defaults');
-var sitemap = require('./lib/sitemap');
-var pluginName = 'gulp-sitemap';
 var chalk = require('chalk');
+var defaults = require('lodash.defaults');
+var gutil = require('gulp-util');
+var path = require('path');
+var through = require('through2');
+
+var pluginName = 'gulp-sitemap';
+var sitemap = require('./lib/sitemap');
 
 module.exports = function (options) {
     var config = defaults(options || {}, {
-        changefreq: null,
+        changefreq: undefined,
         fileName: 'sitemap.xml',
         lastmod: null,
         mappings: [],
         newLine: gutil.linefeed,
-        priority: null,
+        priority: undefined,
         spacing: '    ',
         verbose: false
     });
@@ -31,6 +32,7 @@ module.exports = function (options) {
         gutil.log(pluginName, msg);
         config.changefreq = options.changeFreq;
     }
+    // site url should have a trailing slash
     if (config.siteUrl.slice(-1) !== '/') {
         config.siteUrl = config.siteUrl + '/';
     }

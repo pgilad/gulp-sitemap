@@ -83,7 +83,7 @@ Gets filled inside the sitemap in the tag `<changefreq>`. Not added by default.
 
 Type: `string`
 
-Default: `null`
+Default: `undefined`
 
 Valid Values: `['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']`
 
@@ -97,7 +97,7 @@ Gets filled inside the sitemap in the tag `<priority>`. Not added by default.
 
 Type: `string`
 
-Default: `null`
+Default: `undefined`
 
 Valid Values: `0.0` to `1.0`
 
@@ -161,7 +161,13 @@ mappings: [{
     pages: [ 'minimatch pattern' ],
     changefreq: 'hourly',
     priority: 0.5,
-    lastmod: Date.now()
+    lastmod: Date.now(),
+    hreflang: [{
+        lang: 'ru',
+        getHref: function(siteUrl, file, lang, loc) {
+            return 'http://www.amazon.ru/' + file;
+        }
+    }]
 },
 //....
 ]
@@ -170,10 +176,10 @@ mappings: [{
 - Every file will be matched against the supplied patterns
 - Only defined attributes for a matched file are applied.
 - Only the first match will apply, so consequent matches for the filename will not apply.
-- Possible attributes to override: `changefreq`,  `priority` and `lastmod`.
+- Possible attributes to set: `hreflang`, `changefreq`, `priority` and `lastmod`.
 - All rules applying to [options](#options) apply to the attributes that can overridden.
 
-#### pages
+##### pages
 
 Type: `array`
 
@@ -186,6 +192,22 @@ Every file will be matched against the supplied patterns.
 Uses [multimatch](https://github.com/sindresorhus/multimatch) to match patterns against filenames.
 
 Example: `pages: ['home/index.html', 'home/see-*.html', '!home/see-admin.html']`
+
+##### hreflang
+
+Matching pages can get their `hreflang` tags set using this option.
+
+The input is an array like so:
+
+```js
+hreflang: [{
+    lang: 'ru',
+    getHref: function(siteUrl, file, lang, loc) {
+        // return href src for the hreflang. For example:
+        return 'http://www.amazon.ru/' + file;
+    }
+}]
+```
 
 #### verbose
 

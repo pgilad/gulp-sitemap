@@ -37,7 +37,9 @@
     "chalk": "^1.0.0",
     "gulp-util": "^3.0.4",
     "lodash.defaults": "^3.1.1",
+    "lodash.find": "^4.0.2",
     "lodash.includes": "^3.1.2",
+    "lodash.pick": "^4.0.1",
     "multimatch": "^2.0.0",
     "slash": "^1.0.0",
     "through2": "^2.0.0"
