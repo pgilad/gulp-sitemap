@@ -29,8 +29,7 @@ module.exports = function (options) {
     }
     if (options.changeFreq) {
         msg = chalk.magenta('changeFreq') + ' has been deprecated. Please use ' + chalk.cyan('changefreq');
-        gutil.log(pluginName, msg);
-        config.changefreq = options.changeFreq;
+        throw new gutil.PluginError(pluginName, msg);
     }
     // site url should have a trailing slash
     if (config.siteUrl.slice(-1) !== '/') {

@@ -110,38 +110,6 @@ describe('general settings', function () {
         stream.end();
     });
 
-    it('should deprecate changeFreq', function (cb) {
-
-        var write = process.stdout.write;
-        var output = [];
-        process.stdout.write = (function (stub) {
-            return function (string) {
-                // stub.apply(process.stdout, arguments);
-                output.push(string);
-            };
-        })(process.stdout.write);
-
-        var stream = sitemap({
-            siteUrl: 'http://www.amazon.com',
-            changeFreq: 'hourly'
-        });
-
-        stream.on('data', function (data) {
-            var contents = data.contents.toString();
-            contents.should.containEql('<changefreq>hourly</changefreq>');
-        }).on('end', function () {
-            process.stdout.write = write;
-            var msgs = chalk.stripColor(output.join('\n'));
-            msgs.should.containEql('deprecated');
-            msgs.should.containEql('changeFreq');
-            msgs.should.containEql('changefreq');
-            cb();
-        });
-
-        stream.write(new gutil.File(testFile));
-        stream.end();
-    });
-
     it('should generate a sitemap.xml with correct html files included', function (cb) {
         var stream = sitemap({
             siteUrl: 'http://www.amazon.com'
