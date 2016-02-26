@@ -121,9 +121,10 @@ describe('general settings', function () {
 
             contents.should.containEql('test.html');
             contents.should.containEql('nested/article.html');
+            contents.should.containEql('another_index.html');
             contents.should.not.containEql('404.html');
             contents.should.not.containEql('home.html');
-            contents.should.not.containEql('index.html');
+            contents.should.not.containEql(/\/index.html/);
         });
 
         stream.on('end', cb);
