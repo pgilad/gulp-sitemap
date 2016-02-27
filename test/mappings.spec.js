@@ -200,4 +200,24 @@ describe('mappings', function() {
         stream.write(new gutil.File(dummyFile));
         stream.end();
     });
+
+    it('should modify the loc with mappings', function(cb) {
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            mappings: [{
+                pages: ['*/*test.html'],
+                modifyloc: function(loc) {
+                    return loc.substr(0, loc.lastIndexOf('.')) || loc; // Removes the file extension
+                }
+            }]
+        });
+
+        stream.on('data', function(data) {
+            var contents = data.contents.toString();
+            contents.should.match(/\/test<\/loc>/i);
+        }).on('end', cb);
+
+        stream.write(new gutil.File(dummyFile));
+        stream.end();
+    });
 });
