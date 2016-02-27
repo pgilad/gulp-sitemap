@@ -209,6 +209,16 @@ hreflang: [{
 }]
 ```
 
+##### modifyloc
+
+Matching pages can get their `loc` tag modified by using a function.
+
+```js
+modifyloc: function(loc) {
+    return loc.substr(0, loc.lastIndexOf('.')) || loc; // Removes the file extension
+}
+```
+
 #### verbose
 
 Type: `boolean`
