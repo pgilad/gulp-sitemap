@@ -162,9 +162,12 @@ mappings: [{
     changefreq: 'hourly',
     priority: 0.5,
     lastmod: Date.now(),
+    getLoc(siteUrl, loc, entry) {
+        return loc.substr(0, loc.lastIndexOf('.')) || loc; // Removes the file extension
+    },
     hreflang: [{
         lang: 'ru',
-        getHref: function(siteUrl, file, lang, loc) {
+        getHref(siteUrl, file, lang, loc) {
             return 'http://www.amazon.ru/' + file;
         }
     }]
@@ -176,7 +179,7 @@ mappings: [{
 - Every file will be matched against the supplied patterns
 - Only defined attributes for a matched file are applied.
 - Only the first match will apply, so consequent matches for the filename will not apply.
-- Possible attributes to set: `hreflang`, `changefreq`, `priority` and `lastmod`.
+- Possible attributes to set: `hreflang`, `changefreq`, `priority`, `loc` and `lastmod`.
 - All rules applying to [options](#options) apply to the attributes that can overridden.
 
 ##### pages
@@ -207,6 +210,16 @@ hreflang: [{
         return 'http://www.amazon.ru/' + file;
     }
 }]
+```
+
+##### getLoc
+
+Matching pages can get their `loc` tag modified by using a function.
+
+```js
+getLoc: function(siteUrl, loc, entry) {
+    return loc.substr(0, loc.lastIndexOf('.')) || loc; // Removes the file extension
+}
 ```
 
 #### verbose

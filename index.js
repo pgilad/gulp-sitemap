@@ -1,6 +1,6 @@
 'use strict';
 var chalk = require('chalk');
-var defaults = require('lodash.defaults');
+var defaults = require('lodash/defaults');
 var gutil = require('gulp-util');
 var path = require('path');
 var through = require('through2');
