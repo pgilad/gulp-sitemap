@@ -56,7 +56,7 @@ module.exports = function (options) {
                 firstFile = file;
             }
             var mtime = file.stat ? file.stat.mtime : null;
-            var entry = sitemap.getEntryConfig(file.relative, mtime, config);
+            var entry = sitemap.getEntryConfig(file, mtime, config);
             entries.push(entry);
             callback();
         },
