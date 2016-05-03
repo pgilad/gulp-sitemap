@@ -26,7 +26,9 @@ var gulp = require('gulp');
 var sitemap = require('gulp-sitemap');
 
 gulp.task('sitemap', function () {
-    gulp.src('build/**/*.html')
+    gulp.src('build/**/*.html', {
+            read: false
+        })
         .pipe(sitemap({
             siteUrl: 'http://www.amazon.com'
         }))
@@ -45,7 +47,9 @@ var sitemap = require('gulp-sitemap');
 var save = require('gulp-save');
 
 gulp.task('html', function() {
-    gulp.src('*.html')
+    gulp.src('*.html', {
+          read: false
+        })
         .pipe(save('before-sitemap'))
         .pipe(sitemap({
                 siteUrl: 'http://www.amazon.com'
