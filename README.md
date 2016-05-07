@@ -115,13 +115,24 @@ The file last modified time.
 
  If `null` then this plugin will try to get the last modified time from the stream vinyl file, or use `Date.now()` as lastmod.
 
-If the value is not `null` - It will be used as lastmod. That gives the user the ability to manually set the `lastmod`.
+If the value is not `null` - It will be used as lastmod. When `lastmod` is a function, it is executed in the context of the current file. A string can be used to manually set a fixed `lastmod`.
 
-Type: `string|Datetime`
+Type: `string|Datetime|Function`
 
 Default: `null`
 
 Required: `false`
+
+Example that uses git to get lastmod from the latest commit of a file:
+
+```js
+lastmod: function(file) {
+  var cmd = 'git log -1 --format=%cI "' + file.relative + '"';
+  return execSync(cmd, {
+    cwd: file.base
+  }).toString().trim();
+}
+```
 
 **Note: any falsey (other than null) value is also valid and will skip this xml tag**
 
