@@ -14,7 +14,7 @@ gulp.task('default', function () {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('git', function () {
+gulp.task('hreflang', function () {
     gulp.src('test/fixtures/**/*.html', {
             read: false
         })
@@ -22,7 +22,13 @@ gulp.task('git', function () {
             siteUrl: 'http://www.amazon.com/',
             priority: '0.5',
             changefreq: 'weekly',
-            lastmod: 'git log -1 --format=%cI $1'
+            hreflang: [{
+              lang: 'ru',
+              getHref: function(siteUrl, file, lang, loc) {
+                  // return href src for the hreflang. For example:
+                  return 'http://www.amazon.ru/' + file;
+              }
+            }]
         }))
         .pipe(gulp.dest('./'));
 });
