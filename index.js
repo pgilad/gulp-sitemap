@@ -55,8 +55,8 @@ module.exports = function (options) {
             if (!firstFile) {
                 firstFile = file;
             }
-            var mtime = file.stat ? file.stat.mtime : null;
-            var entry = sitemap.getEntryConfig(file.relative, mtime, config);
+
+            var entry = sitemap.getEntryConfig(file, config);
             entries.push(entry);
             callback();
         },
