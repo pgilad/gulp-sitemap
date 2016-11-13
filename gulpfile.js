@@ -51,3 +51,16 @@ gulp.task('git', function () {
     }))
     .pipe(gulp.dest('./'));
 });
+
+gulp.task('remove-file-extension', function () {
+    gulp.src('test/fixtures/**/*.html', {
+        read: false
+    })
+    .pipe(sitemap({
+        siteUrl: 'https://vanceauto.com',
+        getLoc(siteUrl, loc) {
+            return loc.replace(/\.\w+$/, '');
+        },
+    }))
+    .pipe(gulp.dest('./'));
+});

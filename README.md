@@ -179,7 +179,8 @@ mappings: [{
     priority: 0.5,
     lastmod: Date.now(),
     getLoc(siteUrl, loc, entry) {
-        return loc.substr(0, loc.lastIndexOf('.')) || loc; // Removes the file extension
+        // Removes the file extension if it exists
+        return loc.replace(/\.\w+$/, '');
     },
     hreflang: [{
         lang: 'ru',
@@ -234,7 +235,7 @@ Matching pages can get their `loc` tag modified by using a function.
 
 ```js
 getLoc: function(siteUrl, loc, entry) {
-    return loc.substr(0, loc.lastIndexOf('.')) || loc; // Removes the file extension
+    return loc.replace(/\.\w+$/, '');
 }
 ```
 
