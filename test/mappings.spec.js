@@ -1,8 +1,8 @@
 /* global it,describe */
 'use strict';
 var should = require('should');
-var gutil = require('gulp-util');
 var sitemap = require('../index');
+var Vinyl = require('vinyl');
 
 describe('mappings', function() {
 
@@ -36,7 +36,7 @@ describe('mappings', function() {
             contents.should.containEql('<priority>0.5</priority>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -61,7 +61,7 @@ describe('mappings', function() {
             contents.should.containEql('<priority>0.4</priority>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -85,7 +85,7 @@ describe('mappings', function() {
             contents.should.containEql('<priority>0.4</priority>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -104,7 +104,7 @@ describe('mappings', function() {
             contents.should.not.containEql('<priority>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -124,7 +124,7 @@ describe('mappings', function() {
             contents.should.containEql('<priority>0</priority>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -143,7 +143,7 @@ describe('mappings', function() {
             contents.should.not.containEql('<lastmod>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -164,7 +164,7 @@ describe('mappings', function() {
             contents.should.containEql('<lastmod>' + time + '</lastmod>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -197,7 +197,7 @@ describe('mappings', function() {
             contents.should.match(/www.amazon.de/i);
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 
@@ -217,7 +217,7 @@ describe('mappings', function() {
             contents.should.match(/\/test<\/loc>/i);
         }).on('end', cb);
 
-        stream.write(new gutil.File(dummyFile));
+        stream.write(new Vinyl(dummyFile));
         stream.end();
     });
 });
