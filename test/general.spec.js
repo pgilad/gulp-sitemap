@@ -4,10 +4,10 @@ var fs = require('fs');
 
 var chalk = require('chalk');
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var should = require('should');
 var sitemap = require('../index');
+var Vinyl = require('vinyl');
 
 describe('general settings', function () {
     var testFile = {
@@ -52,7 +52,7 @@ describe('general settings', function () {
         stream.on('end', cb);
         expectedLastmod = fs.statSync(testedFile).mtime;
 
-        stream.write(new gutil.File({
+        stream.write(new Vinyl({
             cwd: __dirname,
             base: __dirname,
             path: testedFile,
@@ -76,7 +76,7 @@ describe('general settings', function () {
             contents.should.not.containEql('<lastmod>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(testFile));
+        stream.write(new Vinyl(testFile));
         stream.end();
     });
 
@@ -91,7 +91,7 @@ describe('general settings', function () {
             contents.should.not.containEql('<changefreq>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(testFile));
+        stream.write(new Vinyl(testFile));
         stream.end();
     });
 
@@ -106,7 +106,7 @@ describe('general settings', function () {
             contents.should.not.containEql('<priority>');
         }).on('end', cb);
 
-        stream.write(new gutil.File(testFile));
+        stream.write(new Vinyl(testFile));
         stream.end();
     });
 
@@ -144,7 +144,7 @@ describe('general settings', function () {
             contents.should.containEql('<lastmod>' + time + '</lastmod>');
         }).on('end', cb);
 
-        stream.write(new gutil.File({
+        stream.write(new Vinyl({
             cwd: __dirname,
             base: __dirname,
             path: 'test/fixtures/test.html',
@@ -189,8 +189,8 @@ describe('general settings', function () {
             contents: new Buffer('hello there')
         };
 
-        stream.write(new gutil.File(testFile));
-        stream.write(new gutil.File(testFile2));
+        stream.write(new Vinyl(testFile));
+        stream.write(new Vinyl(testFile2));
         stream.end();
     });
 
