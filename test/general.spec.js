@@ -8,6 +8,7 @@ var rename = require('gulp-rename');
 var should = require('should');
 var sitemap = require('../index');
 var Vinyl = require('vinyl');
+var path = require('path');
 
 describe('general settings', function () {
     var testFile = {
@@ -216,5 +217,32 @@ describe('general settings', function () {
             extname: ''
         }))
         .pipe(stream);
+    });
+
+    it('should work with index.html if siteUrl has a trailing slash', function (cb) {
+        var stream = sitemap({
+            siteUrl: 'http://www.amazon.com/'
+        });
+
+        stream.on('data', function (data) {
+            data.path.should.containEql('sitemap.xml');
+            var contents = data.contents.toString();
+
+            contents.should.not.containEql('http://www.amazon.com//</loc>');
+            contents.should.containEql('http://www.amazon.com/</loc>');
+        });
+
+        stream.on('end', cb);
+
+        var stat = fs.statSync(path.join(__dirname, 'fixtures/test.html'));
+        stream.write(new Vinyl({
+            cwd: __dirname,
+            base: __dirname,
+            path: path.join(__dirname, 'index.html'),
+            contents: new Buffer('hello there'),
+            stat: stat
+        }));
+
+        stream.end();
     });
 });
