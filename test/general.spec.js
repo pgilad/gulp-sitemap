@@ -1,21 +1,23 @@
-/* global it,describe */
+/* global it, describe */
 'use strict';
-var fs = require('fs');
+require('should');
 
-var chalk = require('chalk');
-var gulp = require('gulp');
-var rename = require('gulp-rename');
-var should = require('should');
-var sitemap = require('../index');
-var Vinyl = require('vinyl');
-var path = require('path');
+const fs = require('fs');
+
+const chalk = require('chalk');
+const gulp = require('gulp');
+const path = require('path');
+const rename = require('gulp-rename');
+const sitemap = require('../index');
+const stripAnsi = require('strip-ansi');
+const Vinyl = require('vinyl');
 
 describe('general settings', function () {
-    var testFile = {
+    const testFile = {
         cwd: __dirname,
         base: __dirname,
         path: 'test/fixtures/test.html',
-        contents: new Buffer('hello there')
+        contents: Buffer.from('hello there')
     };
 
     it('should throw if not provided with site url', function () {
@@ -29,18 +31,18 @@ describe('general settings', function () {
     });
 
     it('should generate a sitemap.xml using default values', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             changefreq: 'daily',
             priority: '0.5'
         });
-        var expectedLastmod;
-        var testedFile = 'test/fixtures/test.html';
-        var fileStat = fs.statSync(__filename);
+        let expectedLastmod;
+        const testedFile = 'test/fixtures/test.html';
+        const fileStat = fs.statSync(__filename);
 
         stream.on('data', function (data) {
             data.path.should.containEql('sitemap.xml');
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
 
             contents.should.containEql('test.html');
             contents.should.not.containEql('home.html');
@@ -57,7 +59,7 @@ describe('general settings', function () {
             cwd: __dirname,
             base: __dirname,
             path: testedFile,
-            contents: new Buffer('hello there'),
+            contents: Buffer.from('hello there'),
             stat: fileStat
         }));
 
@@ -65,7 +67,7 @@ describe('general settings', function () {
     });
 
     it('should generate a sitemap.xml without lastmod', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             changefreq: 'daily',
             priority: '0.5',
@@ -73,7 +75,7 @@ describe('general settings', function () {
         });
 
         stream.on('data', function (data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.not.containEql('<lastmod>');
         }).on('end', cb);
 
@@ -82,13 +84,13 @@ describe('general settings', function () {
     });
 
     it('should generate a sitemap.xml without changefreq', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             priority: '0.5'
         });
 
         stream.on('data', function (data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.not.containEql('<changefreq>');
         }).on('end', cb);
 
@@ -97,13 +99,13 @@ describe('general settings', function () {
     });
 
     it('should generate a sitemap.xml without priority', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             changefreq: 'daily'
         });
 
         stream.on('data', function (data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.not.containEql('<priority>');
         }).on('end', cb);
 
@@ -112,13 +114,13 @@ describe('general settings', function () {
     });
 
     it('should generate a sitemap.xml with correct html files included', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com'
         });
 
         stream.on('data', function (data) {
             data.path.should.containEql('sitemap.xml');
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
 
             contents.should.containEql('test.html');
             contents.should.containEql('nested/article.html');
@@ -134,14 +136,14 @@ describe('general settings', function () {
     });
 
     it('should handle a case with no file.stats', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com'
         });
 
         stream.on('data', function (data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             // get generated timestamp
-            var time = contents.match(/<lastmod>(.+)<\/lastmod>/i)[1];
+            const time = contents.match(/<lastmod>(.+)<\/lastmod>/i)[1];
             // make sure the tag exists
             contents.should.containEql('<lastmod>' + time + '</lastmod>');
         }).on('end', cb);
@@ -150,7 +152,7 @@ describe('general settings', function () {
             cwd: __dirname,
             base: __dirname,
             path: 'test/fixtures/test.html',
-            contents: new Buffer('hello there'),
+            contents: Buffer.from('hello there'),
             stat: null
         }));
         stream.end();
@@ -158,8 +160,8 @@ describe('general settings', function () {
 
     it('should apply the verbose option', function (cb) {
 
-        var write = process.stdout.write;
-        var output = [];
+        const write = process.stdout.write;
+        const output = [];
         process.stdout.write = (function (stub) {
             // jshint unused:false
             return function (string) {
@@ -168,7 +170,7 @@ describe('general settings', function () {
             };
         })(process.stdout.write);
 
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             verbose: true
         });
@@ -179,16 +181,16 @@ describe('general settings', function () {
 
         stream.on('end', function () {
             process.stdout.write = write;
-            var msgs = chalk.stripColor(output.join('\n'));
+            const msgs = stripAnsi(output.join('\n'));
             msgs.should.containEql('Files in sitemap: 2');
             cb();
         });
 
-        var testFile2 = {
+        const testFile2 = {
             cwd: __dirname,
             base: __dirname,
             path: 'test/fixtures/test2.html',
-            contents: new Buffer('hello there')
+            contents: Buffer.from('hello there')
         };
 
         stream.write(new Vinyl(testFile));
@@ -197,13 +199,13 @@ describe('general settings', function () {
     });
 
     it('should generate a sitemap without extensions', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com'
         });
 
         stream.on('data', function (data) {
             data.path.should.containEql('sitemap.xml');
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
 
             contents.should.containEql('test');
             contents.should.containEql('nested/article');
@@ -213,20 +215,20 @@ describe('general settings', function () {
 
         stream.on('end', cb);
         gulp.src('test/fixtures/**/*.html')
-        .pipe(rename({
-            extname: ''
-        }))
-        .pipe(stream);
+            .pipe(rename({
+                extname: ''
+            }))
+            .pipe(stream);
     });
 
     it('should work with index.html if siteUrl has a trailing slash', function (cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com/'
         });
 
         stream.on('data', function (data) {
             data.path.should.containEql('sitemap.xml');
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
 
             contents.should.not.containEql('http://www.amazon.com//</loc>');
             contents.should.containEql('http://www.amazon.com/</loc>');
@@ -234,12 +236,12 @@ describe('general settings', function () {
 
         stream.on('end', cb);
 
-        var stat = fs.statSync(path.join(__dirname, 'fixtures/test.html'));
+        const stat = fs.statSync(path.join(__dirname, 'fixtures/test.html'));
         stream.write(new Vinyl({
             cwd: __dirname,
             base: __dirname,
             path: path.join(__dirname, 'index.html'),
-            contents: new Buffer('hello there'),
+            contents: Buffer.from('hello there'),
             stat: stat
         }));
 
