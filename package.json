@@ -43,7 +43,7 @@
     "vinyl": "^2.2.0"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-rename": "^1.4.0",
     "mocha": "^5.2.0",
     "should": "^13.2.3",
