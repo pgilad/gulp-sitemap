@@ -1,17 +1,17 @@
 'use strict';
-var chalk = require('chalk');
-var defaults = require('lodash/defaults');
-var log = require('fancy-log');
-var path = require('path');
-var PluginError = require('plugin-error');
-var through = require('through2');
-var Vinyl = require('vinyl');
+const chalk = require('chalk');
+const defaults = require('lodash/defaults');
+const log = require('fancy-log');
+const path = require('path');
+const PluginError = require('plugin-error');
+const through = require('through2');
+const Vinyl = require('vinyl');
 
-var pluginName = 'gulp-sitemap';
-var sitemap = require('./lib/sitemap');
+const pluginName = 'gulp-sitemap';
+const sitemap = require('./lib/sitemap');
 
-module.exports = function (options) {
-    var config = defaults(options || {}, {
+module.exports = function (options = {}) {
+    const config = defaults({}, options, {
         changefreq: undefined,
         fileName: 'sitemap.xml',
         lastmod: null,
@@ -21,9 +21,9 @@ module.exports = function (options) {
         spacing: '    ',
         verbose: false
     });
-    var entries = [];
-    var firstFile;
-    var msg;
+    const entries = [];
+    let firstFile;
+    let msg;
 
     if (!config.siteUrl) {
         msg = 'siteUrl is a required param';
@@ -58,7 +58,7 @@ module.exports = function (options) {
                 firstFile = file;
             }
 
-            var entry = sitemap.getEntryConfig(file, config);
+            const entry = sitemap.getEntryConfig(file, config);
             entries.push(entry);
             callback();
         },
@@ -66,7 +66,7 @@ module.exports = function (options) {
             if (!firstFile) {
                 return callback();
             }
-            var contents = sitemap.prepareSitemap(entries, config);
+            const contents = sitemap.prepareSitemap(entries, config);
             if (options.verbose) {
                 msg = 'Files in sitemap: ' + entries.length;
                 log(pluginName, msg);

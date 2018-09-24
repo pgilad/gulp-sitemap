@@ -1,20 +1,22 @@
 /* global it,describe */
 'use strict';
-var should = require('should');
-var sitemap = require('../index');
-var Vinyl = require('vinyl');
+
+require('should');
+
+const sitemap = require('../index');
+const Vinyl = require('vinyl');
 
 describe('mappings', function() {
 
-    var dummyFile = {
+    const dummyFile = {
         cwd: __dirname,
         base: __dirname,
         path: 'test/fixtures/test.html',
-        contents: new Buffer('hello there')
+        contents: Buffer.from('hello there')
     };
 
     it('should not be affected if mappings does not match', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             changefreq: 'daily',
             priority: '0.5',
@@ -27,7 +29,7 @@ describe('mappings', function() {
 
         stream.on('data', function(data) {
             data.path.should.containEql('sitemap.xml');
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
 
             contents.should.containEql('test.html');
             contents.should.not.containEql('home.html');
@@ -41,7 +43,7 @@ describe('mappings', function() {
     });
 
     it('should work with mappings for files', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             changefreq: 'daily',
             mappings: [{
@@ -53,7 +55,7 @@ describe('mappings', function() {
 
         stream.on('data', function(data) {
             data.path.should.containEql('sitemap.xml');
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.containEql('test.html');
             contents.should.not.containEql('home.html');
             contents.should.containEql('<loc>http://www.amazon.com/fixtures/test.html</loc>');
@@ -66,7 +68,7 @@ describe('mappings', function() {
     });
 
     it('only the first matching mappings will override a file', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             mappings: [{
                 pages: ['*/*test.html'],
@@ -80,7 +82,7 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.containEql('<changefreq>hourly</changefreq>');
             contents.should.containEql('<priority>0.4</priority>');
         }).on('end', cb);
@@ -90,7 +92,7 @@ describe('mappings', function() {
     });
 
     it('should not change a matching mapping if property is undefined', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             mappings: [{
                 pages: ['*/*test.html'],
@@ -99,7 +101,7 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.containEql('<changefreq>hourly</changefreq>');
             contents.should.not.containEql('<priority>');
         }).on('end', cb);
@@ -109,7 +111,7 @@ describe('mappings', function() {
     });
 
     it('should be allowed to set priority 0 in mappings', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             mappings: [{
                 pages: ['*/*test.html'],
@@ -119,7 +121,7 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.containEql('<changefreq>hourly</changefreq>');
             contents.should.containEql('<priority>0</priority>');
         }).on('end', cb);
@@ -129,7 +131,7 @@ describe('mappings', function() {
     });
 
     it('should not set last mod with mappings', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             lastmod: false,
             mappings: [{
@@ -139,7 +141,7 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.not.containEql('<lastmod>');
         }).on('end', cb);
 
@@ -148,7 +150,7 @@ describe('mappings', function() {
     });
 
     it('should set last mod with mappings', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             lastmod: false,
             mappings: [{
@@ -158,8 +160,8 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
-            var time = contents.match(/<lastmod>(.+)<\/lastmod>/i)[1];
+            const contents = data.contents.toString();
+            const time = contents.match(/<lastmod>(.+)<\/lastmod>/i)[1];
             // make sure the tag exists
             contents.should.containEql('<lastmod>' + time + '</lastmod>');
         }).on('end', cb);
@@ -169,7 +171,7 @@ describe('mappings', function() {
     });
 
     it('should set href lang with mappings', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             mappings: [{
                 pages: ['*/*test.html'],
@@ -190,7 +192,7 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.match(/hreflang="ru"/i);
             contents.should.match(/www.amazon.ru/i);
             contents.should.match(/hreflang="de"/i);
@@ -202,7 +204,7 @@ describe('mappings', function() {
     });
 
     it('should modify the loc with mappings', function(cb) {
-        var stream = sitemap({
+        const stream = sitemap({
             siteUrl: 'http://www.amazon.com',
             mappings: [{
                 pages: ['*/*test.html'],
@@ -213,7 +215,7 @@ describe('mappings', function() {
         });
 
         stream.on('data', function(data) {
-            var contents = data.contents.toString();
+            const contents = data.contents.toString();
             contents.should.match(/\/test<\/loc>/i);
         }).on('end', cb);
 
