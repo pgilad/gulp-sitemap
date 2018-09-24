@@ -76,7 +76,7 @@ module.exports = function (options) {
                 cwd: firstFile.cwd,
                 base: firstFile.cwd,
                 path: path.join(firstFile.cwd, config.fileName),
-                contents: new Buffer(contents)
+                contents: Buffer.from(contents)
             }));
             callback();
         });
