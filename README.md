@@ -99,7 +99,7 @@ Required: `false`
 
 Gets filled inside the sitemap in the tag `<priority>`. Not added by default.
 
-Type: `string`
+Type: `string|function`
 
 Default: `undefined`
 
@@ -108,6 +108,16 @@ Valid Values: `0.0` to `1.0`
 Required: `false`
 
 **Note: any falsey (non-zero) value is also valid and will skip this xml tag**
+
+Example using a function as `priority`:
+
+
+```js
+priority: function(siteUrl, loc, entry) {
+    // Give pages inside root path (i.e. no slashes) a higher priority
+    return loc.split('/').length === 0 ? 1 : 0.5;
+}
+```
 
 ### lastmod
 

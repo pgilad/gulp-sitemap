@@ -113,6 +113,24 @@ describe('general settings', function () {
         stream.end();
     });
 
+    it('should generate a sitemap.xml with priority being a function', function (cb) {
+        const stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            changefreq: 'daily',
+            priority: function(siteUrl, loc, entry) {
+                return 0.1;
+            }
+        });
+
+        stream.on('data', function (data) {
+            const contents = data.contents.toString();
+            contents.should.containEql('<priority>0.1</priority>');
+        }).on('end', cb);
+
+        stream.write(new Vinyl(testFile));
+        stream.end();
+    });
+
     it('should generate a sitemap.xml with correct html files included', function (cb) {
         const stream = sitemap({
             siteUrl: 'http://www.amazon.com'
