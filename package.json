@@ -1,6 +1,6 @@
 {
   "name": "gulp-sitemap",
-  "version": "6.0.1",
+  "version": "6.1.0",
   "description": "Generate a search engine friendly sitemap.xml using a Gulp stream",
   "repository": "pgilad/gulp-sitemap",
   "license": "MIT",
