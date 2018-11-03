@@ -247,4 +247,35 @@ describe('general settings', function () {
 
         stream.end();
     });
+
+    it('should work with index.php', function (cb) {
+        const stream = sitemap({
+            siteUrl: 'http://www.amazon.com/',
+            mappings: [{
+                pages: ['index.php'],
+                getLoc(siteUrl, loc, entry) {
+                    return loc.replace(/index\.php/, '');
+                }
+            }]
+        });
+
+        stream.on('data', function (data) {
+            const contents = data.contents.toString();
+
+            contents.should.containEql('http://www.amazon.com/</loc>');
+        });
+
+        stream.on('end', cb);
+
+        const stat = fs.statSync(path.join(__dirname, 'fixtures/index.php'));
+        stream.write(new Vinyl({
+            cwd: __dirname,
+            base: __dirname,
+            path: path.join(__dirname, 'index.php'),
+            contents: Buffer.from('hello there'),
+            stat: stat
+        }));
+
+        stream.end();
+    });
 });

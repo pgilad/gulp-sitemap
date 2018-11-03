@@ -47,6 +47,6 @@
     "gulp-rename": "^1.4.0",
     "mocha": "^5.2.0",
     "should": "^13.2.3",
-    "strip-ansi": "^4.0.0"
+    "strip-ansi": "^5.0.0"
   }
 }
