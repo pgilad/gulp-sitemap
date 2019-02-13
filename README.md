@@ -269,4 +269,4 @@ To [grunt-sitemap](https://github.com/RayViljoen/grunt-sitemap) for the inspirat
 
 ## License
 
-MIT ©[Gilad Peleg](http://giladpeleg.com)
+MIT © [Gilad Peleg](https://www.giladpeleg.com)
