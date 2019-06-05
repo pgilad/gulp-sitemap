@@ -251,4 +251,33 @@ describe('mappings', function() {
 
         stream.end();
     });
+
+    it('should not map when not exist images', function (cb) {
+
+        const dummyFile = {
+            cwd: __dirname,
+            base: __dirname,
+            path: 'test/fixtures/test.html',
+            contents: Buffer.from('hello there')
+        };
+
+        const stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            images: true
+        });
+
+        stream.on('data', function(data) {
+            const contents = data.contents.toString();
+
+            contents.should.not.containEql('<image:loc>');
+            contents.should.not.containEql('</image:loc>');
+            contents.should.not.containEql('<image:image>');
+            contents.should.not.containEql('</image:image>');
+
+        }).on('end', cb);
+
+        stream.write(new Vinyl(dummyFile));
+
+        stream.end();
+    });
 });
