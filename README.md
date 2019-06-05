@@ -168,6 +168,18 @@ Default: `    ` (4 spaces)
 
 Required: `false`
 
+
+### images
+
+For generate sitemap for images per page, just enable images flag to `true`
+
+Type: `boolean`
+
+Default: `undefined`
+
+Required: `false`
+
+
 ### mappings
 
 An object to custom map pages to their own configuration.
