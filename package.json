@@ -4,11 +4,7 @@
   "description": "Generate a search engine friendly sitemap.xml using a Gulp stream",
   "repository": "pgilad/gulp-sitemap",
   "license": "MIT",
-  "author": {
-    "name": "Gilad Peleg",
-    "email": "giladp007@gmail.com",
-    "url": "http://giladpeleg.com"
-  },
+  "author": "Gilad Peleg <gilad@giladpeleg.com> (https://www.giladpeleg.com)",
   "main": "index.js",
   "files": [
     "index.js",
