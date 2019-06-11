@@ -19,7 +19,8 @@ module.exports = function (options = {}) {
         newLine: '\n',
         priority: undefined,
         spacing: '    ',
-        verbose: false
+        verbose: false,
+        noindex: false
     });
     const entries = [];
     let firstFile;
@@ -52,6 +53,13 @@ module.exports = function (options = {}) {
             //skip 404 file
             if (/404\.html?$/i.test(file.relative)) {
                 return callback();
+            }
+
+            if(options.noindex){
+                const contents = file.contents.toString();
+                if (/<meta [^>]*?noindex/i.test(contents)) {
+                    return callback();
+                }
             }
 
             if (!firstFile) {

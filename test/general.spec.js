@@ -144,6 +144,7 @@ describe('general settings', function () {
             contents.should.containEql('nested/article.html');
             contents.should.containEql('another_index.html');
             contents.should.containEql('<loc>http://www.amazon.com/nested/</loc>');
+            contents.should.containEql('noindex.html');
             contents.should.not.containEql('404.html');
             contents.should.not.containEql('home.html');
             contents.should.not.containEql(/\/index.html/);
@@ -296,4 +297,21 @@ describe('general settings', function () {
 
         stream.end();
     });
+
+    it('should exclude pages based on the robots meta tag when the noindex option is set', function(cb) {
+        const stream = sitemap({
+            siteUrl: 'http://www.amazon.com',
+            noindex: true
+        });
+
+        stream.on('data', function (data) {
+            const contents = data.contents.toString();
+
+            contents.should.containEql('http://www.amazon.com/</loc>')
+            contents.should.not.containEql('noindex.html');
+        })
+
+        stream.on('end', cb);
+        gulp.src('test/fixtures/*index.html').pipe(stream);
+    })
 });

@@ -168,6 +168,15 @@ Default: `    ` (4 spaces)
 
 Required: `false`
 
+### noindex
+
+Exclude pages from the sitemap when the `robots` meta tag is set to `noindex`. The plugin needs to be able to read the contents of the files for this to have an effect.
+
+Type: `boolean`
+
+Default: `false`
+
+Required: `false`
 
 ### images
 
