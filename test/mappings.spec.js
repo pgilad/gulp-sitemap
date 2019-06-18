@@ -239,12 +239,13 @@ describe('mappings', function() {
 
         stream.on('data', function(data) {
             const contents = data.contents.toString();
-
+            
             contents.should.containEql('<image:loc>https://via.placeholder.com/300/09f/fff.png</image:loc>');
             contents.should.containEql('<image:loc>http://www.amazon.com/assets/images/placeholder.jpg</image:loc>');
             contents.should.containEql('<image:loc>https://via.placeholder.com/300/09f/000.png</image:loc>');
             contents.should.containEql('<image:loc>https://via.placeholder.com/300/09f/f5f.png</image:loc>');
-
+            contents.should.containEql('<image:loc>http://www.amazon.com/assets/images/placeholder_small.jpg</image:loc>');
+            
         }).on('end', cb);
 
         stream.write(new Vinyl(dummyFile));
