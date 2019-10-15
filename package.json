@@ -41,7 +41,7 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-rename": "^1.4.0",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.1",
     "should": "^13.2.3",
     "strip-ansi": "^5.2.0"
   }
